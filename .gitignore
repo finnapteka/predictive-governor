@@ -1,33 +1,30 @@
-# Python
 __pycache__/
 *.py[cod]
-*.so
-.Python
-venv/
+*.egg-info/
 .venv/
-env/
+venv/
 build/
 dist/
-*.egg-info/
+*.db
+*.db-journal
+*.jsonl
+state.json
+alerts.log
+*.log
 .pytest_cache/
 .coverage
-
-# Артефакты работы (создаются в /var/log, но на всякий случай)
-logs/
-*.log
+htmlcov/
+config.yaml
+apply_patch*.sh
+prepare_github.sh
+.DS_Store
+preflight.sh
+fix_before_push.sh
+fix_1_license.sh
+fix_2_cli.sh
+fix_3_cleanup.sh
+audit.sh
+daily_report.sh
 metrics.csv
 model.pkl
 model.meta.json
-*.pkl
-*.joblib
-
-# IDE / OS
-.vscode/
-.idea/
-*.swp
-.DS_Store
-
-# Локальные секреты
-.env
-.env.*
-secrets/

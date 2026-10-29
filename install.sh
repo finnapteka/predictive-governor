@@ -10,7 +10,7 @@ set -euo pipefail
 
 # ─── Константы (зашиты под ug48 / i7-975) ─────────────────
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-INSTALL_DIR="/opt/predictive_governor"
+INSTALL_DIR="/opt/predictive-governor-git"
 LOG_DIR="/var/log/predictive_governor"
 VENV="${INSTALL_DIR}/venv"
 SYSTEMD_DIR="/etc/systemd/system"

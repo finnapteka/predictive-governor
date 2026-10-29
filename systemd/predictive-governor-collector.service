@@ -5,15 +5,15 @@
 
 [Unit]
 Description=Predictive-governor metrics collector
-Documentation=file:///opt/predictive_governor/README.md
+Documentation=file:///opt/predictive-governor-git/README.md
 After=multi-user.target
 
 [Service]
 Type=simple
 Environment="PYTHONUNBUFFERED=1"
 Environment="PYTHONDONTWRITEBYTECODE=1"
-WorkingDirectory=/opt/predictive_governor
-ExecStart=/opt/predictive_governor/venv/bin/python /opt/predictive_governor/collector.py
+WorkingDirectory=/opt/predictive-governor-git
+ExecStart=/opt/predictive-governor-git/venv/bin/python /opt/predictive-governor-git/collector.py
 
 User=root
 Group=root

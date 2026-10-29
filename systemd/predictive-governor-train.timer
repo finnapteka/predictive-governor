@@ -5,7 +5,7 @@
 
 [Unit]
 Description=Daily training of predictive-governor model
-Documentation=file:///opt/predictive_governor/README.md
+Documentation=file:///opt/predictive-governor-git/README.md
 
 [Timer]
 # Каждый день в 03:30 локального времени (Europe/Moscow на ug48)

@@ -5,15 +5,15 @@
 
 [Unit]
 Description=Train predictive-governor model
-Documentation=file:///opt/predictive_governor/README.md
+Documentation=file:///opt/predictive-governor-git/README.md
 After=multi-user.target
 # Обучение читает metrics.csv — нужно, чтобы коллектор уже писал
 Wants=predictive-governor-collector.service
 
 [Service]
 Type=oneshot
-WorkingDirectory=/opt/predictive_governor
-ExecStart=/opt/predictive_governor/train.sh
+WorkingDirectory=/opt/predictive-governor-git
+ExecStart=/opt/predictive-governor-git/train.sh
 
 User=root
 Group=root
@@ -31,7 +31,7 @@ PrivateTmp=yes
 ProtectSystem=strict
 ProtectHome=yes
 ReadWritePaths=/var/log/predictive_governor
-ReadOnlyPaths=/opt/predictive_governor /proc
+ReadOnlyPaths=/opt/predictive-governor-git /proc
 ProtectKernelTunables=yes
 ProtectKernelModules=yes
 ProtectControlGroups=yes

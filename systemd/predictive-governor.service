@@ -4,7 +4,7 @@
 
 [Unit]
 Description=Predictive CPU frequency governor (MSR backend)
-Documentation=file:///opt/predictive_governor/README.md
+Documentation=file:///opt/predictive-governor-git/README.md
 After=multi-user.target
 Wants=predictive-governor-collector.service
 
@@ -13,8 +13,8 @@ Type=simple
 # Запуск из venv, с явным PYTHONPATH на корень проекта (на случай импортов)
 Environment="PYTHONUNBUFFERED=1"
 Environment="PYTHONDONTWRITEBYTECODE=1"
-WorkingDirectory=/opt/predictive_governor
-ExecStart=/opt/predictive_governor/venv/bin/python /opt/predictive_governor/predictor.py
+WorkingDirectory=/opt/predictive-governor-git
+ExecStart=/opt/predictive-governor-git/venv/bin/python /opt/predictive-governor-git/predictor.py
 
 # Пользователь root: нужен CAP_SYS_RAWIO (wrmsr), CAP_SYS_NICE (setpriority)
 User=root

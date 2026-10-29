@@ -2,13 +2,13 @@
 # predictive-governor / train.sh
 # Обёртка обучения модели в фоне с минимальным приоритетом.
 # Используется в predictive-governor-train.timer, либо вручную:
-#     sudo /opt/predictive_governor/train.sh
+#     sudo /opt/predictive-governor-git/train.sh
 #
 # Все параметры и пути захардкожены под ug48 / i7-975.
 
 set -euo pipefail
 
-INSTALL_DIR="/opt/predictive_governor"
+INSTALL_DIR="/opt/predictive-governor-git"
 VENV="${INSTALL_DIR}/venv"
 LOG_DIR="/var/log/predictive_governor"
 TRAIN_LOG="${LOG_DIR}/train.log"
