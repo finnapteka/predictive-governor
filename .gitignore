@@ -28,3 +28,4 @@ daily_report.sh
 metrics.csv
 model.pkl
 model.meta.json
+reports/
