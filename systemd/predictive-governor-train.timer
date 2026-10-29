@@ -1,0 +1,23 @@
+# predictive-governor / systemd/predictive-governor-train.timer
+# Ежедневное обучение модели в 03:30 (локальное время).
+# Persistent=true: если машина была выключена в момент срабатывания,
+# обучение выполнится при ближайшей загрузке.
+
+[Unit]
+Description=Daily training of predictive-governor model
+Documentation=file:///opt/predictive_governor/README.md
+
+[Timer]
+# Каждый день в 03:30 локального времени (Europe/Moscow на ug48)
+OnCalendar=*-*-* 03:30:00
+# Догоняем пропущенный запуск, если машина была выключена
+Persistent=true
+# Разброс 5 минут, чтобы не совпасть с другими cron-задачами (например,
+# mintupdate, fwupd-refresh в 00:58, dpkg-db-backup в 00:00)
+RandomizedDelaySec=5m
+# Не запускать чаще раза в сутки, даже если unit перезапустят вручную
+AccuracySec=1min
+Unit=predictive-governor-train.service
+
+[Install]
+WantedBy=timers.target

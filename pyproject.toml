@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "predictive-governor"
+version = "1.0.0"
+description = "Predictive CPU frequency governor for Linux using machine learning"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.9"
+authors = [{name = "SMarsh"}]

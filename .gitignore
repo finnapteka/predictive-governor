@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.Python
+venv/
+.venv/
+env/
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+.coverage
+
+# Артефакты работы (создаются в /var/log, но на всякий случай)
+logs/
+*.log
+metrics.csv
+model.pkl
+model.meta.json
+*.pkl
+*.joblib
+
+# IDE / OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Локальные секреты
+.env
+.env.*
+secrets/

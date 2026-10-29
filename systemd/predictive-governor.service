@@ -1,0 +1,64 @@
+# predictive-governor / systemd/predictive-governor.service
+# Демон предиктивного управления частотой CPU через MSR.
+# Требует root (wrmsr / rdmsr / cpuidle / setpriority на чужие процессы).
+
+[Unit]
+Description=Predictive CPU frequency governor (MSR backend)
+Documentation=file:///opt/predictive_governor/README.md
+After=multi-user.target
+Wants=predictive-governor-collector.service
+
+[Service]
+Type=simple
+# Запуск из venv, с явным PYTHONPATH на корень проекта (на случай импортов)
+Environment="PYTHONUNBUFFERED=1"
+Environment="PYTHONDONTWRITEBYTECODE=1"
+WorkingDirectory=/opt/predictive_governor
+ExecStart=/opt/predictive_governor/venv/bin/python /opt/predictive_governor/predictor.py
+
+# Пользователь root: нужен CAP_SYS_RAWIO (wrmsr), CAP_SYS_NICE (setpriority)
+User=root
+Group=root
+
+# Ресурсы: демон лёгкий, ограничиваем сверху
+Nice=-5
+IOSchedulingClass=best-effort
+IOSchedulingPriority=4
+MemoryMax=256M
+CPUQuota=15%
+# MSR-регистры должны быть доступны (CAP_SYS_RAWIO)
+AmbientCapabilities=CAP_SYS_RAWIO CAP_SYS_NICE CAP_DAC_READ_SEARCH
+CapabilityBoundingSet=CAP_SYS_RAWIO CAP_SYS_NICE CAP_DAC_READ_SEARCH
+
+# Надёжность
+Restart=on-failure
+RestartSec=10
+StartLimitIntervalSec=300
+StartLimitBurst=5
+TimeoutStopSec=30
+KillSignal=SIGTERM
+
+# Hardening
+NoNewPrivileges=yes
+PrivateTmp=yes
+#ProtectSystem=strict
+ProtectSystem=true
+ProtectHome=yes
+#ReadWritePaths=/var/log/predictive_governor /sys/devices/system/cpu
+ReadWritePaths=/var/log/predictive_governor
+ReadOnlyPaths=/proc /sys/class/hwmon
+ProtectKernelTunables=no
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_UNIX
+RestrictNamespaces=yes
+LockPersonality=yes
+
+# stdout/stderr → journald (сам predictor пишет в /var/log/predictive_governor/daemon.log,
+# но journal тоже полезен для быстрого просмотра)
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=predictive-governor
+
+[Install]
+WantedBy=multi-user.target

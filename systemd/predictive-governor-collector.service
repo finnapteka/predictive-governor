@@ -1,0 +1,53 @@
+# predictive-governor / systemd/predictive-governor-collector.service
+# Сборщик метрик 1 Гц. Пишет /var/log/predictive_governor/metrics.csv.
+# Лёгкий, но всё же отдельный процесс — изолируем от демона,
+# чтобы падение одного не валило другой.
+
+[Unit]
+Description=Predictive-governor metrics collector
+Documentation=file:///opt/predictive_governor/README.md
+After=multi-user.target
+
+[Service]
+Type=simple
+Environment="PYTHONUNBUFFERED=1"
+Environment="PYTHONDONTWRITEBYTECODE=1"
+WorkingDirectory=/opt/predictive_governor
+ExecStart=/opt/predictive_governor/venv/bin/python /opt/predictive_governor/collector.py
+
+User=root
+Group=root
+
+# Лёгкий, но не должен мешать
+Nice=10
+IOSchedulingClass=idle
+MemoryMax=64M
+CPUQuota=5%
+
+Restart=on-failure
+RestartSec=5
+StartLimitIntervalSec=300
+StartLimitBurst=5
+TimeoutStopSec=10
+KillSignal=SIGTERM
+
+# Hardening
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/var/log/predictive_governor
+ReadOnlyPaths=/proc /sys/class/hwmon /sys/devices/system/cpu
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_UNIX
+RestrictNamespaces=yes
+LockPersonality=yes
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=predictive-governor-collector
+
+[Install]
+WantedBy=multi-user.target

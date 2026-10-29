@@ -1,0 +1,49 @@
+# predictive-governor / systemd/predictive-governor-train.service
+# Одноразовый сервис обучения. Запускается таймером или вручную:
+#     sudo systemctl start predictive-governor-train.service
+# Использует train.sh (nice 19 + ionice idle + timeout 15 мин).
+
+[Unit]
+Description=Train predictive-governor model
+Documentation=file:///opt/predictive_governor/README.md
+After=multi-user.target
+# Обучение читает metrics.csv — нужно, чтобы коллектор уже писал
+Wants=predictive-governor-collector.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/predictive_governor
+ExecStart=/opt/predictive_governor/train.sh
+
+User=root
+Group=root
+
+# Ресурсы: обучение — раз в сутки, можно не жалеть, но ограничим
+Nice=19
+IOSchedulingClass=idle
+MemoryMax=1G
+CPUQuota=80%
+TimeoutStartSec=20min
+
+# Hardening
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/var/log/predictive_governor
+ReadOnlyPaths=/opt/predictive_governor /proc
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_UNIX
+RestrictNamespaces=yes
+LockPersonality=yes
+
+# stdout/stderr → journald; train.sh сам пишет в /var/log/.../train.log
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=predictive-governor-train
+
+[Install]
+# Не включается через `enable` — активируется таймером.
+# WantedBy= отсутствует намеренно.
